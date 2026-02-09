@@ -1,8 +1,9 @@
-name: Database Backup
+name: Daily PostgreSQL Backup
 
 on:
   schedule:
-    - cron: "0 6 * * *" # 3 AM Argentina (UTC-3)
+    # Todos los días a las 03:00 AM Argentina (06:00 UTC)
+    - cron: "0 6 * * *"
   workflow_dispatch:
 
 jobs:
@@ -10,23 +11,37 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repo
+      - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Setup Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
-
-      - name: Install PostgreSQL 17 client
+      - name: Install PostgreSQL client 17
         run: |
+          sudo apt-get update
+          sudo apt-get install -y wget ca-certificates
+          wget -qO - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo tee /etc/apt/trusted.gpg.d/postgresql.asc
+          echo "deb http://apt.postgresql.org/pub/repos/apt noble-pgdg main" | sudo tee /etc/apt/sources.list.d/pgdg.list
           sudo apt-get update
           sudo apt-get install -y postgresql-client-17
 
-      - name: Run backup
+      - name: Verify pg_dump version
+        run: pg_dump --version
+
+      - name: Create backup
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
-          GDRIVE_FOLDER_ID: ${{ secrets.GDRIVE_FOLDER_ID }}
-          GDRIVE_SERVICE_ACCOUNT: ${{ secrets.GDRIVE_SERVICE_ACCOUNT }}
-        run: node scripts/backup.js
+        run: |
+          mkdir -p backups
+          pg_dump "$DATABASE_URL" > backups/backup-$(date +%Y-%m-%d).sql
 
+      - name: Upload backup to Google Drive
+        uses: rclone/rclone-action@v2
+        with:
+          args: copy backups gdrive:dermacore-backups
+        env:
+          RCLONE_CONFIG_GDRIVE_TYPE: drive
+          RCLONE_CONFIG_GDRIVE_CLIENT_ID: ${{ secrets.GDRIVE_CLIENT_ID }}
+          RCLONE_CONFIG_GDRIVE_CLIENT_SECRET: ${{ secrets.GDRIVE_CLIENT_SECRET }}
+          RCLONE_CONFIG_GDRIVE_TOKEN: ${{ secrets.GDRIVE_TOKEN }}
+
+      - name: Cleanup local backups
+        run: rm -rf backups
