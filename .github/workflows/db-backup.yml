@@ -2,7 +2,7 @@ name: Daily PostgreSQL Backup
 
 on:
   schedule:
-    # Todos los días 03:00 AM Argentina (06:00 UTC)
+    # Todos los días a las 03:00 AM Argentina (06:00 UTC)
     - cron: "0 6 * * *"
   workflow_dispatch:
 
@@ -14,27 +14,31 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Install PostgreSQL client 17
+      # ─────────────────────────────────────────────
+      # Crear backup usando pg_dump de Postgres 17
+      # ─────────────────────────────────────────────
+      - name: Create PostgreSQL backup (Docker Postgres 17)
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
         run: |
-          sudo apt-get update
-          sudo apt-get install -y wget ca-certificates gnupg lsb-release
-          wget -qO - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo tee /etc/apt/trusted.gpg.d/postgresql.asc
-          echo "deb http://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" | sudo tee /etc/apt/sources.list.d/pgdg.list
-          sudo apt-get update
-          sudo apt-get install -y postgresql-client-17
+          mkdir -p backups
+          docker run --rm \
+            -e DATABASE_URL="$DATABASE_URL" \
+            -v "$PWD/backups:/backups" \
+            postgres:17 \
+            pg_dump "$DATABASE_URL" > backups/backup-$(date +%Y-%m-%d).sql
 
+      # ─────────────────────────────────────────────
+      # Instalar rclone
+      # ─────────────────────────────────────────────
       - name: Install rclone
         run: |
           sudo apt-get update
           sudo apt-get install -y rclone
 
-      - name: Create PostgreSQL backup
-        env:
-          DATABASE_URL: ${{ secrets.DATABASE_URL }}
-        run: |
-          mkdir -p backups
-          pg_dump-17 "$DATABASE_URL" > backups/backup-$(date +%Y-%m-%d).sql
-
+      # ─────────────────────────────────────────────
+      # Configurar rclone con Service Account
+      # ─────────────────────────────────────────────
       - name: Configure rclone (Google Drive Service Account)
         env:
           GDRIVE_SERVICE_ACCOUNT: ${{ secrets.GDRIVE_SERVICE_ACCOUNT }}
@@ -49,11 +53,17 @@ jobs:
           service_account_file = service-account.json
           EOF
 
+      # ─────────────────────────────────────────────
+      # Subir backup a Google Drive
+      # ─────────────────────────────────────────────
       - name: Upload backup to Google Drive
         env:
           GDRIVE_FOLDER_ID: ${{ secrets.GDRIVE_FOLDER_ID }}
         run: |
           rclone copy backups gdrive: --drive-root-folder-id $GDRIVE_FOLDER_ID
 
+      # ─────────────────────────────────────────────
+      # Limpieza
+      # ─────────────────────────────────────────────
       - name: Cleanup
         run: rm -rf backups service-account.json
