@@ -2,7 +2,7 @@ name: Daily PostgreSQL Backup
 
 on:
   schedule:
-    # Todos los días a las 03:00 AM Argentina (06:00 UTC)
+    # Todos los días 03:00 AM Argentina (06:00 UTC)
     - cron: "0 6 * * *"
   workflow_dispatch:
 
@@ -17,31 +17,43 @@ jobs:
       - name: Install PostgreSQL client 17
         run: |
           sudo apt-get update
-          sudo apt-get install -y wget ca-certificates
+          sudo apt-get install -y wget ca-certificates gnupg lsb-release
           wget -qO - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo tee /etc/apt/trusted.gpg.d/postgresql.asc
-          echo "deb http://apt.postgresql.org/pub/repos/apt noble-pgdg main" | sudo tee /etc/apt/sources.list.d/pgdg.list
+          echo "deb http://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" | sudo tee /etc/apt/sources.list.d/pgdg.list
           sudo apt-get update
           sudo apt-get install -y postgresql-client-17
 
-      - name: Verify pg_dump version
-        run: pg_dump --version
+      - name: Install rclone
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y rclone
 
-      - name: Create backup
+      - name: Create PostgreSQL backup
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
         run: |
           mkdir -p backups
           pg_dump "$DATABASE_URL" > backups/backup-$(date +%Y-%m-%d).sql
 
-      - name: Upload backup to Google Drive
-        uses: rclone/rclone-action@v2
-        with:
-          args: copy backups gdrive:dermacore-backups
+      - name: Configure rclone (Google Drive Service Account)
         env:
-          RCLONE_CONFIG_GDRIVE_TYPE: drive
-          RCLONE_CONFIG_GDRIVE_CLIENT_ID: ${{ secrets.GDRIVE_CLIENT_ID }}
-          RCLONE_CONFIG_GDRIVE_CLIENT_SECRET: ${{ secrets.GDRIVE_CLIENT_SECRET }}
-          RCLONE_CONFIG_GDRIVE_TOKEN: ${{ secrets.GDRIVE_TOKEN }}
+          GDRIVE_SERVICE_ACCOUNT: ${{ secrets.GDRIVE_SERVICE_ACCOUNT }}
+        run: |
+          mkdir -p ~/.config/rclone
+          echo "$GDRIVE_SERVICE_ACCOUNT" > service-account.json
 
-      - name: Cleanup local backups
-        run: rm -rf backups
+          cat <<EOF > ~/.config/rclone/rclone.conf
+          [gdrive]
+          type = drive
+          scope = drive
+          service_account_file = service-account.json
+          EOF
+
+      - name: Upload backup to Google Drive
+        env:
+          GDRIVE_FOLDER_ID: ${{ secrets.GDRIVE_FOLDER_ID }}
+        run: |
+          rclone copy backups gdrive: --drive-root-folder-id $GDRIVE_FOLDER_ID
+
+      - name: Cleanup
+        run: rm -rf backups service-account.json
