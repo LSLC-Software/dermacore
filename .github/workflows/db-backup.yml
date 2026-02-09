@@ -33,7 +33,7 @@ jobs:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
         run: |
           mkdir -p backups
-          pg_dump "$DATABASE_URL" > backups/backup-$(date +%Y-%m-%d).sql
+          pg_dump-17 "$DATABASE_URL" > backups/backup-$(date +%Y-%m-%d).sql
 
       - name: Configure rclone (Google Drive Service Account)
         env:
