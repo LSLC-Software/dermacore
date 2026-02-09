@@ -14,6 +14,7 @@ export function usePacientes() {
       setPacientes(data);
       setError(null);
     } catch (_error) {
+      void _error;
       setError("Error al cargar los pacientes");
     } finally {
       setLoading(false);

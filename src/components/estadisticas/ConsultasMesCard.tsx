@@ -63,6 +63,8 @@ export default function ConsultasMesCard({
   const isDown = tendencia7dPct !== null && tendencia7dPct < -5;
   const isFlat = tendencia7dPct === null || (!isUp && !isDown);
 
+  void isFlat;
+
   const TrendIcon = isUp ? TrendingUp : isDown ? TrendingDown : Minus;
 
   const badgeClasses = isUp

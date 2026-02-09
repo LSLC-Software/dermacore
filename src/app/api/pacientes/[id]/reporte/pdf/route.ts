@@ -8,6 +8,8 @@ import path from "path";
 let cachedLogoBase64: string | null = null;
 let logoLoadTime: number = 0;
 
+void logoLoadTime;
+
 function parseId(id: string) {
   const n = Number(id);
   return Number.isFinite(n) && n > 0 ? Math.floor(n) : null;

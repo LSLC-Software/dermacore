@@ -29,8 +29,6 @@ import CoseguroComboBox, {
   type CoseguroOption,
 } from "@/components/consultas/coseguroComboBox";
 import type { Consulta } from "@/types/consulta";
-import type { CheckedState } from "@radix-ui/react-checkbox";
-import { Checkbox } from "@/components/ui/checkbox";
 
 type Props = {
   consulta: Consulta;

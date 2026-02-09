@@ -270,6 +270,8 @@ export function generatePacienteHistorialPdf(params: {
     const consultaBoxY = doc.y;
     const consultaBoxWidth = 515;
 
+    void index;
+
     // Encabezado de consulta con fondo cyan
     doc
       .rect(consultaBoxX, consultaBoxY, consultaBoxWidth, 28)
