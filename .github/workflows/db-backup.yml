@@ -2,8 +2,7 @@ name: Daily PostgreSQL Backup
 
 on:
   schedule:
-    # Todos los días a las 03:00 AM Argentina (06:00 UTC)
-    - cron: "0 6 * * *"
+    - cron: "0 6 * * *" # 03:00 Argentina
   workflow_dispatch:
 
 jobs:
@@ -11,12 +10,8 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      # ─────────────────────────────────────────────
-      # Crear backup usando pg_dump de Postgres 17
-      # ─────────────────────────────────────────────
       - name: Create PostgreSQL backup (Docker Postgres 17)
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
@@ -28,42 +23,29 @@ jobs:
             postgres:17 \
             pg_dump "$DATABASE_URL" > backups/backup-$(date +%Y-%m-%d).sql
 
-      # ─────────────────────────────────────────────
-      # Instalar rclone
-      # ─────────────────────────────────────────────
       - name: Install rclone
         run: |
           sudo apt-get update
           sudo apt-get install -y rclone
 
-      # ─────────────────────────────────────────────
-      # Configurar rclone con Service Account
-      # ─────────────────────────────────────────────
-      - name: Configure rclone (Google Drive Service Account)
+      - name: Configure rclone (OAuth)
         env:
-          GDRIVE_SERVICE_ACCOUNT: ${{ secrets.GDRIVE_SERVICE_ACCOUNT }}
+          GDRIVE_TOKEN: ${{ secrets.GDRIVE_TOKEN }}
         run: |
           mkdir -p ~/.config/rclone
-          echo "$GDRIVE_SERVICE_ACCOUNT" > service-account.json
-
           cat <<EOF > ~/.config/rclone/rclone.conf
           [gdrive]
           type = drive
           scope = drive
-          service_account_file = service-account.json
+          token = $GDRIVE_TOKEN
           EOF
 
-      # ─────────────────────────────────────────────
-      # Subir backup a Google Drive
-      # ─────────────────────────────────────────────
       - name: Upload backup to Google Drive
         env:
           GDRIVE_FOLDER_ID: ${{ secrets.GDRIVE_FOLDER_ID }}
         run: |
-          rclone copy backups gdrive: --drive-root-folder-id $GDRIVE_FOLDER_ID
+          rclone copy backups gdrive: \
+            --drive-root-folder-id $GDRIVE_FOLDER_ID
 
-      # ─────────────────────────────────────────────
-      # Limpieza
-      # ─────────────────────────────────────────────
       - name: Cleanup
-        run: rm -rf backups service-account.json
+        run: rm -rf backups
