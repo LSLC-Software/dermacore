@@ -28,6 +28,7 @@ type Group = {
 };
 
 export function getMenuList(_pathname: string): Group[] {
+  void _pathname;
   return [
     {
       groupLabel: "",

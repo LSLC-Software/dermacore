@@ -17,7 +17,7 @@ import { useForm, SubmitHandler } from "react-hook-form"
 import type { InputsCreateCoseguro } from "@/types/inputsCreateCoseguro"
 import NotifySuccessComponent from "@/components/obras-sociales/notifySuccess"
 import NotifyNotSuccessComponent from "@/components/obras-sociales/notifyNotSuccess"
-import { updateCoseguro, updateObraSocial } from "@/lib/utils"
+import { updateCoseguro } from "@/lib/utils"
 
 interface UpdateModalProps {
   idCoseguro:number

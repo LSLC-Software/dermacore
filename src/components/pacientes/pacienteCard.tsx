@@ -80,6 +80,8 @@ export default function PacienteCard({
   const labelEstadoAction = estadoPaciente ? "Dar de baja" : "Dar de alta";
   const nextEstado = !estadoPaciente;
 
+  void _onVerHistoria;
+
   return (
     <>
       <Card className="rounded-xl border-muted/60">

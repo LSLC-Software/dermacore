@@ -22,6 +22,8 @@ export default function RegisterClient() {
     name: '',
   });
 
+  void loading;
+
   useEffect(() => {
     const timer = setTimeout(() => {
       setIsLoaded(true);

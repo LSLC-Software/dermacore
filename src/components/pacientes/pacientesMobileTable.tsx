@@ -74,6 +74,8 @@ function Item({
   const labelEstadoAction = estadoPaciente ? "Dar de baja" : "Dar de alta";
   const nextEstado = !estadoPaciente;
 
+  void _onVerHistoria;
+
   return (
     <>
       <div className="px-4 py-3">
