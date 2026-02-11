@@ -22,6 +22,20 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="es">
+      {/*
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  LSLC Software
+  DermaCore System
+  
+  Architects & Lead Developers:
+    - LautAp
+    - Senkupai Joelox
+    - LuiG
+    - Calisinho
+  
+  © 2026 LSLC Software
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+*/}
       <body className="antialiased">
         <Providers>{children}</Providers>
       </body>
