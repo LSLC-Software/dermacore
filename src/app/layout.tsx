@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import { Providers } from "./providers";
+import GlobalSignature from "@/components/firmas/GlobalSignature";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -22,21 +23,8 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="es">
-      {/*
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-  LSLC Software
-  DermaCore System
-  
-  Architects & Lead Developers:
-    - LautAp
-    - Senkupai Joelox
-    - LuiG
-    - Calisinho
-  
-  © 2026 LSLC Software
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-*/}
       <body className="antialiased">
+        <GlobalSignature />
         <Providers>{children}</Providers>
       </body>
     </html>
