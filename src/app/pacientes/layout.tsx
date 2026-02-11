@@ -9,14 +9,31 @@ export default function PacientesLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <ProtectedPage>
-      <SidebarProvider>
-        <Header />
-        <SideBar>
-          {children}
-        </SideBar>
-      </SidebarProvider>
-    </ProtectedPage>
+    <>
+      {/*
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+      
+        ██████╗  █████╗ ██╗     ██╗
+       ██╔════╝ ██╔══██╗██║     ██║
+       ██║      ███████║██║     ██║
+       ██║      ██╔══██║██║     ██║
+       ╚██████╗ ██║  ██║███████╗██║
+        ╚═════╝ ╚═╝  ╚═╝╚══════╝╚═╝
+
+            Engineered by Cali
+            © 2026
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+      */}
+
+      <ProtectedPage>
+        <SidebarProvider>
+          <Header />
+          <SideBar>
+            {children}
+          </SideBar>
+        </SidebarProvider>
+      </ProtectedPage>
+    </>
   );
 }
-
