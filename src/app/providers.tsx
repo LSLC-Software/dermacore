@@ -7,6 +7,6 @@ export function Providers({ children }: { children: React.ReactNode }) {
   
           <SessionProvider>
               {children}            
-          </SessionProvider>;
+          </SessionProvider>
           </>
 }
