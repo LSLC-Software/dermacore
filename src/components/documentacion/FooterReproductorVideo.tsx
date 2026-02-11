@@ -1,5 +1,3 @@
-import { Download, FileText } from "lucide-react";
-
 interface Lesson {
     id: number;
     title: string;
@@ -31,7 +29,6 @@ export default function FooterReproductorVideo({ activeLesson, activeTab, setAct
                             }`}
                         >
                             {tab === 'overview' && 'Descripción General'}
-                            {tab === 'resources' && 'Recursos'}
                             {tab === 'notes' && 'Mis Notas'}
                         </button>
                     ))}
@@ -49,18 +46,7 @@ export default function FooterReproductorVideo({ activeLesson, activeTab, setAct
                         </ul>
                     </div>
                 )}
-                {activeTab === 'resources' && (
-                    <div className="flex flex-col gap-3">
-                        <div className="flex items-center gap-3 p-3 border rounded-lg hover:bg-gray-50 cursor-pointer">
-                            <FileText className="text-blue-500" />
-                            <div className="flex-1">
-                                <p className="font-medium">Documentacion_{activeLesson.id}.pdf</p>
-                                <p className="text-xs text-gray-500">2.4 MB</p>
-                            </div>
-                            <Download size={18} className="text-gray-400" />
-                        </div>
-                    </div>
-                )}
+                
                 {activeTab === 'notes' && (
                     <textarea 
                         className="w-full p-3 border rounded-lg bg-yellow-50 text-gray-700 min-h-[150px] focus:outline-blue-500"
