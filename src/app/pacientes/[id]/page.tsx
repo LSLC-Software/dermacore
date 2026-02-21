@@ -9,7 +9,7 @@ import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { ArrowLeft, Loader2, Phone, IdCard, MapPin, CreditCard } from "lucide-react";
 import Link from "next/link";
-import { formatFechaAR } from "@/lib/utils";
+import { formatFechaAR, formatFechaNacimientoAR, calcularEdad } from "@/lib/utils";
 import RegistrarConsultaForm from "@/components/consultas/registrarConsultaForm";
 import HistorialConsultasLista from "@/components/consultas/historialConsultasLista";
 import type { Consulta } from "@/types/consulta";
@@ -211,7 +211,7 @@ function PacienteDetailContent() {
               </p>
               <p className="text-lg font-semibold text-foreground">
                 {paciente.fechaNacimiento 
-                  ? formatFechaAR(paciente.fechaNacimiento) 
+                  ? `${formatFechaNacimientoAR(paciente.fechaNacimiento)} - ${calcularEdad(paciente.fechaNacimiento)} años`
                   : "No registrada"}
               </p>
             </div>
