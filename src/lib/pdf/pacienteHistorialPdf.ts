@@ -26,19 +26,20 @@ function writeTableRow(
 ) {
   const labelWidth = 150;
   const valueX = startX + labelWidth;
+  const currentY = doc.y;
 
-  doc.font("Helvetica-Bold").fontSize(10).text(label, startX, doc.y, {
+  doc.font("Helvetica-Bold").fontSize(10).text(label, startX, currentY, {
     width: labelWidth - 10,
   });
 
   doc
     .font("Helvetica")
     .fontSize(10)
-    .text(value ?? "No se rellenó este apartado", valueX, doc.y - 10, {
+    .text(value ?? "No se rellenó este apartado", valueX, currentY, {
       width: 350,
     });
 
-  doc.moveDown(1.2);
+  doc.moveDown(0.8);
 }
 
 function writeSection(
@@ -214,7 +215,7 @@ export function generatePacienteHistorialPdf(params: {
       .text(`${paciente.domicilioPaciente}`, col2X + 80, contentY + 5);
   }
 
-  // Fila 4: Fecha de alta
+  // Fila 4: Fecha de nacimiento
   contentY += 25;
   doc
     .rect(boxX, contentY, boxWidth, 25)
@@ -224,12 +225,16 @@ export function generatePacienteHistorialPdf(params: {
     .fontSize(9)
     .font("Helvetica-Bold")
     .fillColor(CYAN_COLOR)
-    .text("Fecha de alta:", col1X, contentY + 5);
+    .text("Fecha de nacimiento:", col1X, contentY + 5);
 
   doc
     .font("Helvetica")
     .fillColor("#000000")
-    .text(`${formatFecha(paciente.fechaHoraPaciente)}`, valueX, contentY + 5);
+    .text(
+      paciente.fechaNacimiento ? `${formatFecha(new Date(paciente.fechaNacimiento))}` : "No registrada",
+      valueX,
+      contentY + 5
+    );
 
   doc.y = contentY + 30;
 
