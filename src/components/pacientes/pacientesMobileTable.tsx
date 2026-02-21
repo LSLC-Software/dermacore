@@ -28,7 +28,12 @@ import {
 import { MoreHorizontal, Pencil, CornerDownRight } from "lucide-react";
 
 import EditPacienteModal from "@/components/pacientes/editPacienteModal";
-import { setEstadoPaciente, formatFechaAR, formatFechaNacimientoAR } from "@/lib/utils";
+import {
+  setEstadoPaciente,
+  formatFechaAR,
+  formatFechaNacimientoAR,
+  calcularEdad,
+} from "@/lib/utils";
 
 type Props = {
   pacientes: PacienteConObras[];
@@ -73,6 +78,8 @@ function Item({
 
   const labelEstadoAction = estadoPaciente ? "Dar de baja" : "Dar de alta";
   const nextEstado = !estadoPaciente;
+
+  const edad = calcularEdad(fechaNacimiento);
 
   void _onVerHistoria;
 
@@ -134,6 +141,7 @@ function Item({
           <div className="text-muted-foreground">
             <span className="font-medium text-foreground/70">Fecha nac: </span>
             {formatFechaNacimientoAR(fechaNacimiento)}
+            {edad !== null ? ` (${edad} años)` : ""}
           </div>
 
           <div className="text-muted-foreground">
@@ -157,7 +165,9 @@ function Item({
           </div>
 
           <div className="col-span-2 text-muted-foreground">
-            <span className="font-medium text-foreground/70">Última consulta: </span>
+            <span className="font-medium text-foreground/70">
+              Última consulta:{" "}
+            </span>
             {ultimaConsultaIso ? formatFechaAR(ultimaConsultaIso) : "—"}
           </div>
         </div>

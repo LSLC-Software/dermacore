@@ -253,13 +253,42 @@ export function formatFechaNacimientoAR(
   isoOrNull: string | null | undefined,
 ): string {
   if (!isoOrNull) return "—";
+
   const d = new Date(isoOrNull);
   if (Number.isNaN(d.getTime())) return "—";
 
   return new Intl.DateTimeFormat("es-AR", {
-    timeZone: "America/Argentina/Cordoba",
+    timeZone: "UTC", 
     day: "2-digit",
     month: "2-digit",
     year: "numeric",
   }).format(d);
+}
+
+export function calcularEdad(
+  isoOrNull: string | null | undefined,
+): number | null {
+  if (!isoOrNull) return null;
+
+  const nacimiento = new Date(isoOrNull);
+  if (Number.isNaN(nacimiento.getTime())) return null;
+
+  const hoy = new Date();
+
+  let edad = hoy.getFullYear() - nacimiento.getFullYear();
+
+  const mesActual = hoy.getMonth();
+  const diaActual = hoy.getDate();
+
+  const mesNacimiento = nacimiento.getMonth();
+  const diaNacimiento = nacimiento.getDate();
+
+  if (
+    mesActual < mesNacimiento ||
+    (mesActual === mesNacimiento && diaActual < diaNacimiento)
+  ) {
+    edad--;
+  }
+
+  return edad;
 }
