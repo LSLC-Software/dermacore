@@ -18,7 +18,12 @@ import {
 } from "lucide-react";
 
 import type { PacienteConObras } from "@/types/pacienteConObras";
-import { setEstadoPaciente, formatFechaAR, formatFechaNacimientoAR } from "@/lib/utils";
+import {
+  setEstadoPaciente,
+  formatFechaAR,
+  formatFechaNacimientoAR,
+  calcularEdad,
+} from "@/lib/utils";
 
 import {
   DropdownMenu,
@@ -80,6 +85,8 @@ export default function PacienteCard({
   const labelEstadoAction = estadoPaciente ? "Dar de baja" : "Dar de alta";
   const nextEstado = !estadoPaciente;
 
+  const edad = calcularEdad(fechaNacimiento);
+
   void _onVerHistoria;
 
   return (
@@ -136,11 +143,11 @@ export default function PacienteCard({
           </div>
 
           <div className="mt-5 space-y-3 text-sm">
-
             <div className="flex items-center gap-2 text-sm text-muted-foreground">
               <CalendarDays className="h-4 w-4" />
               <span>
                 Fecha nac.: {formatFechaNacimientoAR(fechaNacimiento)}
+                {edad !== null ? `  - ${edad} años` : ""}
               </span>
             </div>
 
