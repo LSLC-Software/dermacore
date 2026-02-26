@@ -1,101 +1,50 @@
-# 🏥 DermaCor - Sistema de Gestión de Pacientes
+# 🏥 Dermacore 
 
-Sistema para la gestión integral de pacientes en el centro dermatologico, desarrollado por un equipo de 4 personas.
+**DermaCor** es una solución digital integral diseñada específicamente para optimizar la operación de centros dermatológicos. El sistema centraliza la información clínica y administrativa, permitiendo un seguimiento preciso de cada paciente en un entorno seguro y moderno.
 
-## 📋 Descripción del Proyecto
+---
 
-Dermacor es una aplicación web moderna que permite:
-- **Gestión de Pacientes**: Registro, historial y datos médicos.
+## 📋 ¿Qué hace DermaCor?
 
-## 🚀 Tecnologías
+El sistema está diseñado para cubrir el flujo completo de atención médica dermatológica mediante los siguientes módulos:
 
-- **Next.js 15** - Framework React con App Router
-- **TypeScript** - Tipado estático para JavaScript
-- **Tailwind CSS** - Framework CSS utility-first
-- **Prisma** - ORM moderno para bases de datos
-- **PostgreSQL** - Base de datos relacional
-- **Docker** - Contenerización y desarrollo
+* **🗂️ Gestión Inteligente de Pacientes:** Registro detallado de datos personales, contacto y búsqueda avanzada para agilizar la atención.
+* **🩺 Historial Clínico Digital:** Acceso rápido y organizado a la evolución del paciente, diagnósticos previos y tratamientos realizados.
+* **💊 Control de Tratamientos:** Seguimiento pormenorizado de prescripciones médicas y procedimientos estéticos o quirúrgicos.
+* **📊 Panel de Administración:** Visualización de métricas clave para la toma de decisiones dentro del centro.
+* **🏗️ Arquitectura Escalable:** Preparado para manejar grandes volúmenes de datos médicos bajo estándares de seguridad actuales.
 
-## 📋 Requisitos previos
+---
 
-- Node.js 20+
-- npm o yarn
-- Docker y docker-compose
+## 🚀 Stack Tecnológico
 
-## 🛠️ Instalación
+* **Next.js 15 (App Router)** - Framework React de última generación para una interfaz rápida y optimizada.
+* **TypeScript** - Tipado estático para garantizar la robustez y escalabilidad del código.
+* **Tailwind CSS** - Diseño profesional, limpio y adaptado a dispositivos móviles.
+* **Prisma & PostgreSQL** - Gestión de datos relacional sólida, segura y eficiente.
+* **Docker** - Contenerización para asegurar la consistencia entre entornos de desarrollo y producción.
 
-1. Clona el repositorio:
-```bash
-git clone <url-del-repositorio>
-cd Dermacor-
-```
+---
 
-2. Instala las dependencias:
-```bash
-npm i
-```
+## 👥 Equipo de Desarrollo (Core Team)
 
-3. Configura las variables de entorno:
-```bash
-cp .env.example .env
-```
+El desarrollo oficial y mantenimiento de la versión actual (2026) está a cargo de:
 
-4. Inicia la base de datos con Docker:
-```bash
-docker-compose up -d
-```
+| Desarrollador | Rol Principal | GitHub |
+| :--- | :--- | :--- |
+| **Lautaro Apaza** | Fullstack Developer | [@LautaAp23](https://github.com/LautaAp23) |
+| **Luis Gómez** | Frontend Lead | [@LuiGs](https://github.com/LuiGs) |
+| **Facundo Falquito** | Backend & Database | [@Falquito](https://github.com/Falquito) |
+| **Agustín Calisaya** | Fullstack Developer | [@agustincalisaya](https://github.com/agustincalisaya) |
 
-5. Ejecuta las migraciones de Prisma:
-```bash
-npm run prisma:migrate
-npm run prisma:generate
-```
+---
 
-6. (Opcional) Ejecuta el seed:
-```bash
-npm run db:seed
-```
+## 🗃️ Infraestructura y Base de datos
 
-## 🏃‍♂️ Desarrollo
+El proyecto utiliza **PostgreSQL** con **Prisma ORM**. La configuración incluye una instancia de base de datos contenerizada en Docker, garantizando que todo el equipo trabaje sobre el mismo esquema de datos sin conflictos de entorno.
 
-```bash
-npm run dev
-```
+## 📄 Licencia y Derechos de Uso
 
-La aplicación estará disponible en `http://localhost:3000`.
+**Copyright © 2026 Centro Dermatológico. Todos los derechos reservados.**
 
-
-
-## 📁 Scripts disponibles
-
-- `npm run dev` - Inicia el servidor de desarrollo
-- `npm run build` - Construye la aplicación para producción
-- `npm run start` - Inicia el servidor de producción
-- `npm run lint` - Ejecuta el linter
-- `npm run prisma:migrate` - Ejecuta las migraciones de Prisma
-- `npm run prisma:generate` - Genera el cliente de Prisma
-- `npm run prisma:studio` - Abre Prisma Studio
-- `npm run db:seed` - Ejecuta el seed de la base de datos
-
-## 🗃️ Base de datos
-
-El proyecto utiliza PostgreSQL con Prisma como ORM. La configuración de Docker incluye una instancia de PostgreSQL lista para desarrollo.
-
-## 📝 Estructura del proyecto
-
-```
-carelink/
-├── src/
-│   ├── app/                 # App Router de Next.js
-│   ├── components/          # Componentes reutilizables
-│   └── lib/                 # Utilidades y configuración
-├── prisma/                  # Esquemas y migraciones de Prisma
-├── public/                  # Archivos estáticos
-└── docker-compose.yml       # Configuración de Docker
-```
-## Licencia y Derechos de Uso
-
-**Copyright © 2026 Centro Dermatologico. Todos los derechos reservados.**
-
-Este software es propiedad exclusiva de Centro Dermatologico.
-Queda prohibida su distribución, copia, modificación o uso por terceros sin autorización expresa y por escrito del titular..
+Este software es propiedad exclusiva de **Centro Dermatológico**. Queda estrictamente prohibida su distribución, copia, modificación o uso por terceros sin autorización expresa y por escrito del titular.
